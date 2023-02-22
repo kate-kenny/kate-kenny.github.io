@@ -9,7 +9,7 @@ class Perceptron:
         
     def predict(self,X):
         #returns vector of predic ted weights y_hat
-        return 1*(X@self.w > 0)
+        return 1 * (X@self.w > 0)
     
     def score(self,X,y):
         return((np.dot(X, self.w)*y) > 0).mean()
@@ -23,7 +23,6 @@ class Perceptron:
         
         #y into -1s and 1s for 0 and 1 respectively 
         y[y==0] = -1
-        
         for m in range(max_steps):
             i = np.random.randint(X.shape[0])
             x_i = X_[i,:]
