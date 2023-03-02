@@ -3,6 +3,9 @@
     "listing": "/index.html",
     "items": [
       "/posts/blog1/perceptron.html",
+      "/posts/blog2/Logistic Regression.html",
+      "/posts/blog2/Untitled.html",
+      "/posts/blog3/Palmer Penguins.html",
       "/posts/example-blog-post/index.html"
     ]
   }

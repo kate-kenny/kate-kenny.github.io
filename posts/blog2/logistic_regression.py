@@ -4,8 +4,7 @@ class LogisticRegression:
         
     def __init__(self): 
         self.w = []
-        self.history = []
-        self.scorehistory = []
+        self.score_history = []
         self.loss_history = []
 
     def sigmoid(self, z):
@@ -18,7 +17,7 @@ class LogisticRegression:
 
     def predict(self, X):
         #return vector of predicted y_hat
-        return X@self.w
+        return X@self.w > 0
     
     def loss(self, X, y):
         #returns empirical risk of current weights on X and y
@@ -28,7 +27,7 @@ class LogisticRegression:
     def score(self, X, y):
         #returns accuracy of predictions, 1 is perfect classification 
   
-        pred = 1*(self.predict(X) > 0) 
+        pred = self.predict(X)
         n = X.shape[0]
     
         #make both weight vectors -1's and 1's instead of 0's and 1's 
@@ -52,7 +51,8 @@ class LogisticRegression:
                                       
     
     def fit(self, X, y, alpha = .001, max_epochs = 1000): 
-        #fit method using gradient descent
+        #fit method using gradient descent that updates the weight vector w
+        #until the loss converges (solution to the minimum of the loss function)
         
         #append 1's onto X
         X_ = np.append(X, np.ones((X.shape[0], 1)), 1)
@@ -72,8 +72,9 @@ class LogisticRegression:
             new_loss = self.loss(X_, y)
             new_score = self.score(X_, y)
             
-            self.history.append(new_loss) 
-            self.scorehistory.append(new_score)
+            self.loss_history.append(new_loss) 
+            self.score_history.append(new_score)
+            
             count += 1
             
             if np.isclose(new_loss, prev_loss): 
@@ -85,7 +86,7 @@ class LogisticRegression:
             else: 
                 prev_loss = new_loss
                 
-    def fit_stochastic(self, X, y, alpha=.001, max_epochs = 1000): 
+    def fit_stochastic(self, X, y, alpha=.001, batch_size = 10, max_epochs = 1000): 
         #iterates through the n points in batches (of random size) 
         #applies gradient descent to each batch 
         
@@ -99,7 +100,6 @@ class LogisticRegression:
         prev_loss = []
       
         done = False 
-        
         
         order = np.arange(n)
         count = 0 
@@ -125,7 +125,6 @@ class LogisticRegression:
             if (np.isclose(new_loss, prev_loss)) or (count == max_epochs): 
                 done = True 
                 
-   
             else: 
                 prev_loss = new_loss
                                        
