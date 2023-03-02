@@ -317,8 +317,8 @@ background-size: cover;
 <section id="alpha-too-large" class="level3">
 <h3 class="anchored" data-anchor-id="alpha-too-large">Alpha too large</h3>
 <p>Now, let’s examine a case where gradient descent does not converge because the selected alpha size is too large. Below is a plot of the loss of gradient descent with two different alpha values, .01 and 10. For this experiment, we are going to run the models on data with 10 feature dimensions.</p>
-<div class="cell" data-execution_count="49">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Cr</span></span>
+<div class="cell" data-execution_count="50">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Create data with 10 feature dimensions</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>p_features <span class="op">=</span> <span class="dv">10</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> make_blobs(n_samples <span class="op">=</span> <span class="dv">200</span>, n_features <span class="op">=</span> p_features <span class="op">-</span> <span class="dv">1</span>, centers <span class="op">=</span> [(<span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>), (<span class="dv">1</span>, <span class="dv">1</span>)])</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
