@@ -17,11 +17,11 @@ class LogisticRegression:
 
     def predict(self, X):
         #return vector of predicted y_hat
-        return X@self.w > 0
+        return X@self.w
     
     def loss(self, X, y):
         #returns empirical risk of current weights on X and y
-        y_hat = 1*(self.predict(X))
+        y_hat = self.predict(X)
         return self.logistic_loss(y_hat, y).mean()
         
     def score(self, X, y):
@@ -59,8 +59,6 @@ class LogisticRegression:
 
         #initialize random weight vector
         self.w = np.random.rand(X_.shape[1])
-        
-        y[y==0] = -1
         
         done = False
         prev_loss = []
