@@ -75,10 +75,7 @@ class LogisticRegression:
             
             count += 1
             
-            if np.isclose(new_loss, prev_loss): 
-                done = True 
-            
-            elif count == max_epochs: 
+            if count == max_epochs: 
                 done = True 
                 
             else: 
@@ -120,7 +117,7 @@ class LogisticRegression:
             new_loss = self.loss(X_, y)
             self.loss_history.append(new_loss) 
 
-            if (np.isclose(new_loss, prev_loss)) or (count == max_epochs): 
+            if (count == max_epochs): 
                 done = True 
                 
             else: 
