@@ -345,8 +345,8 @@ background-size: cover;
 </section>
 <section id="batch-size" class="level3">
 <h3 class="anchored" data-anchor-id="batch-size">Batch size</h3>
-<p>Our next experiment is the case where the batch size influences how quickly our algorithm (stochastic gradient descent) converges. To illustrate this, we are going to run the algorithm on two different batch sizes and examine the loss convergence. The larger batch size starts out with significantly higher loss than the smaller batch, but it ends up converging around the same time, so the loss improves at a faster rate.</p>
-<div class="cell">
+<p>Our next experiment is the case where the batch size influences how quickly our algorithm (stochastic gradient descent) converges. To illustrate this, we are going to run the algorithm on two different batch sizes and examine the loss convergence. The larger batch size starts out with higher loss than the smaller batch, but it ends up converging around the same time, so the loss improves at a faster rate.</p>
+<div class="cell" data-execution_count="62">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>LR <span class="op">=</span> LogisticRegression()</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>LR.fit_stochastic(X, y, </span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                  max_epochs <span class="op">=</span> <span class="dv">10000</span>, </span>
@@ -368,6 +368,9 @@ background-size: cover;
 <span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>plt.loglog() </span>
 <span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>legend <span class="op">=</span> plt.legend() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Logistic%20Regression_files/figure-html/cell-6-output-1.png" class="img-fluid"></p>
+</div>
 </div>
 
 
