@@ -70,9 +70,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-title','listing-author','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
+      searchColumns: ["listing-title","listing-author","listing-description","listing-categories"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -158,7 +158,7 @@ background-size: cover;
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(4)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(5)</span></div></div></div>
 <!-- main -->
 <main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
 
@@ -172,13 +172,6 @@ background-size: cover;
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
 <div class="quarto-post image-right" data-index="0" data-listing-file-modified-sort="1677721355949" data-listing-reading-time-sort="2.765">
-<div class="thumbnail">
-<a href="./posts/blog1/perceptron.html">
-<div class="thumbnail-image">
-
-</div>
-</a><p><a href="./posts/blog1/perceptron.html"></a></p>
-</div>
 <div class="body">
 <a href="./posts/blog1/perceptron.html">
 <h3 class="no-anchor listing-title">
@@ -200,14 +193,7 @@ Kate Kenny
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="1" data-listing-file-modified-sort="1677788997735" data-listing-reading-time-sort="2.705">
-<div class="thumbnail">
-<a href="./posts/blog2/Logistic Regression.html">
-<div class="thumbnail-image">
-
-</div>
-</a><p><a href="./posts/blog2/Logistic Regression.html"></a></p>
-</div>
+<div class="quarto-post image-right" data-index="1" data-listing-file-modified-sort="1679087920774" data-listing-reading-time-sort="2.705">
 <div class="body">
 <a href="./posts/blog2/Logistic Regression.html">
 <h3 class="no-anchor listing-title">
@@ -229,14 +215,51 @@ Kate Kenny
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="2" data-listing-file-modified-sort="1678979774134" data-listing-reading-time-sort="2.985">
-<div class="thumbnail">
-<a href="./posts/blog3/Palmer Penguins.html">
-<div class="thumbnail-image">
+<div class="quarto-post image-right" data-index="2" data-listing-file-modified-sort="1680026421594" data-listing-reading-time-sort="4.355">
+<div class="body">
+<a href="./posts/blog5/Auditing Allocative Bias.html">
+<h3 class="no-anchor listing-title">
+Auditing Alocative Bias
+</h3>
+<div class="listing-subtitle">
 
 </div>
-</a><p><a href="./posts/blog3/Palmer Penguins.html"></a></p>
+<div class="listing-description">
+In this blog post, we are going to examine algorithmic bias through an audit. Using data from the American Community Survey’s Public Use Microdata Sample (PUMS). I will perform an audit on racial bias in a machine learning model that predicts whether or not an individual in employed.To do this, I will begin by downloading data and training a model to make such predictions. Then, we will examine some of the different measures of fairness like predictive parity and error rate before discussing how the model could be biased and what implications that could have in deployment and beyond. This audit will only consider data from New York State.
 </div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/blog5/Auditing Allocative Bias.html">
+<div class="listing-author">
+Kate Kenny
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="3" data-listing-file-modified-sort="1680027247061" data-listing-reading-time-sort="1.55">
+<div class="body">
+<a href="./posts/blog4/Linear Regression.html">
+<h3 class="no-anchor listing-title">
+Linear Regression
+</h3>
+<div class="listing-subtitle">
+
+</div>
+<div class="listing-description">
+Source code: https://github.com/kate-kenny/kate-kenny.github.io/blob/main/posts/blog4/linear_regression.py
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/blog4/Linear Regression.html">
+<div class="listing-author">
+Kate Kenny
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="4" data-listing-file-modified-sort="1678983585281" data-listing-reading-time-sort="2.985">
 <div class="body">
 <a href="./posts/blog3/Palmer Penguins.html">
 <h3 class="no-anchor listing-title">
@@ -254,34 +277,6 @@ In this blog post, we will explore how different models can be used to classify 
 <a href="./posts/blog3/Palmer Penguins.html">
 <div class="listing-author">
 Kate Kenny
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-listing-date-sort="1673326800000" data-listing-file-modified-sort="1676656317005" data-listing-reading-time-sort="2.205">
-<div class="thumbnail">
-<p><a href="./posts/example-blog-post/index.html"> <img src="./posts/example-blog-post/image.jpg" class="thumnail-image"> </a></p>
-</div>
-<div class="body">
-<a href="./posts/example-blog-post/index.html">
-<h3 class="no-anchor listing-title">
-Hello Blog
-</h3>
-<div class="listing-subtitle">
-
-</div>
-<div class="listing-description">
-<p>An example blog post illustrating the key techniques you’ll need to demonstrate your learning in CSCI 0451.</p>
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/example-blog-post/index.html">
-<div class="listing-date">
-Jan 10, 2023
-</div>
-<div class="listing-author">
-Phil Chodrow
 </div>
 </a>
 </div>
