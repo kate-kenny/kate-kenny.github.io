@@ -268,273 +268,22 @@ background-size: cover;
 </section>
 <section id="basic-descriptives" class="level2">
 <h2 class="anchored" data-anchor-id="basic-descriptives">Basic Descriptives</h2>
-<p>Let’s first answer some basic questions about the test data that we are working with. For the sake of this blog, we are going to compare directly Black and white individuals and remove individuals with other listed races from the data frame. This is obviously an incomplete picture of New York’s population but allows us to directly compare and analyze specific racial discrepencies between white individuals and Black individuals. Note that in the group column of the data frame, group 1 represents white individuals and group 2 represents Black individuals.</p>
-<div class="cell" data-scrolled="true" data-execution_count="102">
+<p>Let’s first answer some basic questions about the test data that we are working with. For the sake of this blog, we are going to compare directly Black and white individuals and remove individuals with other listed races from the data frame. This is obviously an incomplete picture of New York’s population but allows us to directly compare and analyze specific racial discrepencies between white individuals and Black individuals. Note that in the group column of the data frame, group 1 represents white individuals and group 2 represents Black individuals. Furthermore, employment status is 1 for an individual that is employed and 0 for an unemployed individual.</p>
+<div class="cell" data-scrolled="true" data-execution_count="148">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(X_train, columns <span class="op">=</span> features_to_use)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"group"</span>] <span class="op">=</span> group_train</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"label"</span>] <span class="op">=</span> y_train</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>df.shape[<span class="dv">0</span>]</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>y_train.mean()</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="102">
-
-<div>
-
-<table class="dataframe table table-sm table-striped">
-  <thead>
-    <tr>
-      <th></th>
-      <th>AGEP</th>
-      <th>SCHL</th>
-      <th>MAR</th>
-      <th>RELP</th>
-      <th>DIS</th>
-      <th>ESP</th>
-      <th>CIT</th>
-      <th>MIG</th>
-      <th>MIL</th>
-      <th>ANC</th>
-      <th>NATIVITY</th>
-      <th>DEAR</th>
-      <th>DEYE</th>
-      <th>DREM</th>
-      <th>SEX</th>
-      <th>group</th>
-      <th>label</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>65.0</td>
-      <td>22.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>4.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>1.0</td>
-      <td>1</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>24.0</td>
-      <td>20.0</td>
-      <td>5.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>3.0</td>
-      <td>4.0</td>
-      <td>2.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>1</td>
-      <td>True</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>41.0</td>
-      <td>21.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>4.0</td>
-      <td>2.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>1</td>
-      <td>True</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>49.0</td>
-      <td>16.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>4.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>1.0</td>
-      <td>1</td>
-      <td>True</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>64.0</td>
-      <td>19.0</td>
-      <td>5.0</td>
-      <td>0.0</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>4.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>1.0</td>
-      <td>1</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>129993</th>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>5.0</td>
-      <td>7.0</td>
-      <td>2.0</td>
-      <td>7.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>2.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>2</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>129994</th>
-      <td>29.0</td>
-      <td>21.0</td>
-      <td>5.0</td>
-      <td>0.0</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>4.0</td>
-      <td>4.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>1.0</td>
-      <td>1</td>
-      <td>True</td>
-    </tr>
-    <tr>
-      <th>129995</th>
-      <td>91.0</td>
-      <td>8.0</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>4.0</td>
-      <td>1.0</td>
-      <td>4.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>1</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>129996</th>
-      <td>42.0</td>
-      <td>21.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>4.0</td>
-      <td>1.0</td>
-      <td>4.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>1</td>
-      <td>True</td>
-    </tr>
-    <tr>
-      <th>129997</th>
-      <td>18.0</td>
-      <td>15.0</td>
-      <td>5.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>4.0</td>
-      <td>4.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>1</td>
-      <td>False</td>
-    </tr>
-  </tbody>
-</table>
-<p>129998 rows × 17 columns</p>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>y_train.mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="148">
+<pre><code>0.4661840951399252</code></pre>
 </div>
 </div>
-</div>
-<p>There are 129,998 individuals in this data set. Of those individuals, the proportion of people with the target label 1 is .46618.</p>
+<p>There are 129,998 individuals in this data set. Of those individuals, the proportion of people with the target label 1 (employed individuals) is .46618.</p>
 <div class="cell" data-execution_count="53">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df.groupby(<span class="st">"group"</span>)[<span class="st">"label"</span>].mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df.groupby(<span class="st">"group"</span>)[<span class="st">"label"</span>].mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="53">
 <pre><code>group
 1    0.474091
@@ -542,16 +291,16 @@ background-size: cover;
 Name: label, dtype: float64</code></pre>
 </div>
 </div>
-<p>Within each group, there is a difference in the proportion of individuals with the target label 1. Among white individuals (group 1), the proportion is .474091 and among Black individials (group 2) the proportion is .420689. This is a difference that is likely the result of many historical factors and centuries of systemic racism in the United States and certainly deserves much more focus than is covered in the scope of this blog post. However, for now let’s continue. The following table is the result of breaking the data down by race and sex. Note that in the SEX category, 1.0 refers to male and 2.0 refers to female.</p>
+<p>Within each group, there is a difference in the proportion of individuals with the target label 1. Among white individuals (group 1), the proportion is .474091 and among Black individials (group 2) the proportion is .420689. This is a difference that is likely the result of many historical factors and centuries of systemic racism in the United States and certainly deserves much more focus than is covered in the scope of this blog post. It is important to note that as the base rates for white and Black individuals differ, it is impossible for our model to achieve callibration and error rate balance. However, for now let’s continue. The following table is the result of breaking the data down by race and sex. Note that in the SEX category, 1.0 refers to male and 2.0 refers to female.</p>
 <div class="cell" data-execution_count="56">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>intersectional <span class="op">=</span> df.groupby([<span class="st">"group"</span>, <span class="st">"SEX"</span>])[<span class="st">"label"</span>]</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>sns.set_theme()</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>sns.barplot(data<span class="op">=</span>df, x<span class="op">=</span><span class="st">"group"</span>, y<span class="op">=</span><span class="st">"label"</span>, hue<span class="op">=</span><span class="st">"SEX"</span>)</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">#CHANGE LABELS </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>intersectional <span class="op">=</span> df.groupby([<span class="st">"group"</span>, <span class="st">"SEX"</span>])[<span class="st">"label"</span>]</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>sns.set_theme()</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>sns.barplot(data<span class="op">=</span>df, x<span class="op">=</span><span class="st">"group"</span>, y<span class="op">=</span><span class="st">"label"</span>, hue<span class="op">=</span><span class="st">"SEX"</span>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#CHANGE LABELS </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="56">
 <pre><code>&lt;AxesSubplot: xlabel='group', ylabel='label'&gt;</code></pre>
 </div>
@@ -565,24 +314,24 @@ Name: label, dtype: float64</code></pre>
 <h2 class="anchored" data-anchor-id="build-and-train-model">Build and train model</h2>
 <p>The model we are going to use is the Scitkit-Learn Decision Tree Classifier. Before finalizing our model, we can use cross validation to select the depth for the model in order to balance a high training score and limiting overfitting.</p>
 <div class="cell" data-execution_count="27">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.tree <span class="im">import</span> DecisionTreeClassifier, plot_tree</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_pipeline</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> confusion_matrix</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">#cross validation to choose depth</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_val_score</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">12345</span>)</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>)</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> d <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>, <span class="dv">10</span>):</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    T <span class="op">=</span> DecisionTreeClassifier(max_depth <span class="op">=</span> d)</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    m <span class="op">=</span> cross_val_score(T, X_train, y_train, cv <span class="op">=</span> <span class="dv">10</span>).mean()</span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    ax.scatter(d, m, color <span class="op">=</span> <span class="st">"black"</span>)</span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ax.scatter(d, T.score(X_test, y_test), color = "firebrick")</span></span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>labs <span class="op">=</span> ax.<span class="bu">set</span>(xlabel <span class="op">=</span> <span class="st">"Complexity (depth)"</span>, ylabel <span class="op">=</span> <span class="st">"Performance (score)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.tree <span class="im">import</span> DecisionTreeClassifier, plot_tree</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_pipeline</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> confusion_matrix</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">#cross validation to choose depth</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_val_score</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">12345</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> d <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>, <span class="dv">10</span>):</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    T <span class="op">=</span> DecisionTreeClassifier(max_depth <span class="op">=</span> d)</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    m <span class="op">=</span> cross_val_score(T, X_train, y_train, cv <span class="op">=</span> <span class="dv">10</span>).mean()</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    ax.scatter(d, m, color <span class="op">=</span> <span class="st">"black"</span>)</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ax.scatter(d, T.score(X_test, y_test), color = "firebrick")</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>labs <span class="op">=</span> ax.<span class="bu">set</span>(xlabel <span class="op">=</span> <span class="st">"Complexity (depth)"</span>, ylabel <span class="op">=</span> <span class="st">"Performance (score)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>0.8037772249581154
 0.8101165062594978
@@ -594,8 +343,8 @@ Name: label, dtype: float64</code></pre>
 </div>
 <p>It seems like a depth of 4 could be ideal as the score improvement slows down significantly when the depth continues to increase beyon 4. So, to prevent against overfitting it seems that 4 is the best choice. Given that, let’s train our model on the available data before moving into testing.</p>
 <div class="cell" data-execution_count="73">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> make_pipeline(StandardScaler(), DecisionTreeClassifier(max_depth <span class="op">=</span> <span class="dv">4</span>))</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>model.fit(X_train, y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> make_pipeline(StandardScaler(), DecisionTreeClassifier(max_depth <span class="op">=</span> <span class="dv">4</span>))</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>model.fit(X_train, y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="73">
 <style>#sk-container-id-1 {color: black;background-color: white;}#sk-container-id-1 pre{padding: 0;}#sk-container-id-1 div.sk-toggleable {background-color: white;}#sk-container-id-1 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-container-id-1 label.sk-toggleable__label-arrow:before {content: "▸";float: left;margin-right: 0.25em;color: #696969;}#sk-container-id-1 label.sk-toggleable__label-arrow:hover:before {color: black;}#sk-container-id-1 div.sk-estimator:hover label.sk-toggleable__label-arrow:before {color: black;}#sk-container-id-1 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-container-id-1 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-container-id-1 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-container-id-1 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {content: "▾";}#sk-container-id-1 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-container-id-1 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-container-id-1 div.sk-estimator:hover {background-color: #d4ebff;}#sk-container-id-1 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-container-id-1 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: 0;}#sk-container-id-1 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;position: relative;}#sk-container-id-1 div.sk-item {position: relative;z-index: 1;}#sk-container-id-1 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;position: relative;}#sk-container-id-1 div.sk-item::before, #sk-container-id-1 div.sk-parallel-item::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: -1;}#sk-container-id-1 div.sk-parallel-item {display: flex;flex-direction: column;z-index: 1;position: relative;background-color: white;}#sk-container-id-1 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-container-id-1 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-container-id-1 div.sk-parallel-item:only-child::after {width: 0;}#sk-container-id-1 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;}#sk-container-id-1 div.sk-label label {font-family: monospace;font-weight: bold;display: inline-block;line-height: 1.2em;}#sk-container-id-1 div.sk-label-container {text-align: center;}#sk-container-id-1 div.sk-container {/* jupyter's `normalize.less` sets `[hidden] { display: none; }` but bootstrap.min.css set `[hidden] { display: none !important; }` so we also need the `!important` here to be able to override the default hidden behavior on the sphinx rendered scikit-learn.org. See: https://github.com/scikit-learn/scikit-learn/issues/21755 */display: inline-block !important;position: relative;}#sk-container-id-1 div.sk-text-repr-fallback {display: none;}</style><div id="sk-container-id-1" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>Pipeline(steps=[('standardscaler', StandardScaler()),
                 ('decisiontreeclassifier',
@@ -609,10 +358,10 @@ Name: label, dtype: float64</code></pre>
 <h2 class="anchored" data-anchor-id="testing-and-audit">Testing and Audit</h2>
 <p>Now that we have trained a model, let’s use it on test data and do an audit surrounding the accuracy, fairness, and allocative bias in the results.</p>
 <div class="cell" data-execution_count="76">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>y_hat <span class="op">=</span> model.predict(X_test)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Overall accruacy:"</span>)</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>((y_hat <span class="op">==</span> y_test).mean())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>y_hat <span class="op">=</span> model.predict(X_test)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Overall accruacy:"</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>((y_hat <span class="op">==</span> y_test).mean())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Overall accruacy:
 0.8151692307692308
@@ -624,10 +373,10 @@ Accuracy for Black individuals
 </div>
 <p>Initially, our model has an accuracy of .815 overall. Next, let’s consider the general confusion matrix for this test data.</p>
 <div class="cell" data-execution_count="77">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> confusion_matrix</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co">#calculate false neg, false pos rates</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>confusion_matrix(y_test, y_hat, normalize <span class="op">=</span> <span class="st">"true"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> confusion_matrix</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co">#calculate false neg, false pos rates</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>confusion_matrix(y_test, y_hat, normalize <span class="op">=</span> <span class="st">"true"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="77">
 <pre><code>array([[0.79528736, 0.20471264],
        [0.16192053, 0.83807947]])</code></pre>
@@ -636,8 +385,8 @@ Accuracy for Black individuals
 <p>The false negative rate of our model is .1619 and the false positive rate of our model is .2047.</p>
 <p>Next, let’s consider some of the mathematical measures of fairness that we have been working with in the context of this model. We can measure the calibration, error rate balance, and statistical parity.</p>
 <div class="cell" data-execution_count="78">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#calculate PPV</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>np.<span class="bu">sum</span>(y_test) <span class="op">/</span> np.<span class="bu">sum</span>(y_hat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#calculate PPV</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>np.<span class="bu">sum</span>(y_test) <span class="op">/</span> np.<span class="bu">sum</span>(y_hat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="78">
 <pre><code>0.9311216624529814</code></pre>
 </div>
@@ -645,10 +394,10 @@ Accuracy for Black individuals
 <p>The overall positive predictive values (PPV) of the model is .9311.</p>
 <p>Now that we have some overall measures, let’s dive deeper into the different measures of accuracy by group.</p>
 <div class="cell" data-execution_count="85">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Accuracy for white individuals"</span>)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>((y_hat <span class="op">==</span> y_test)[group_test <span class="op">==</span> <span class="dv">1</span>].mean())</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Accuracy for Black individuals"</span>)</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>((y_hat <span class="op">==</span> y_test)[group_test <span class="op">==</span> <span class="dv">2</span>].mean())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Accuracy for white individuals"</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>((y_hat <span class="op">==</span> y_test)[group_test <span class="op">==</span> <span class="dv">1</span>].mean())</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Accuracy for Black individuals"</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>((y_hat <span class="op">==</span> y_test)[group_test <span class="op">==</span> <span class="dv">2</span>].mean())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Accuracy for white individuals
 0.8174079284348735
@@ -657,53 +406,26 @@ Accuracy for Black individuals
 </div>
 </div>
 <p>When we group by race above, we can see that the accuracy for white individuals (.8174) is slightly higher than the accuracy for Black individuals (.8023). Next let’s consider the positive predictive value for both groups. This is the number of predicted labels of 1 divided by the actual number of target labels 1. In other words, it’s how often a positive prediction from the model is correct.</p>
-<div class="cell" data-scrolled="true" data-execution_count="86">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"PPV for white individuals"</span>)</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.<span class="bu">sum</span>(y_test[group_test <span class="op">==</span> <span class="dv">1</span>]) <span class="op">/</span> np.<span class="bu">sum</span>(y_hat))</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"PPV for Black individuals"</span>)</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.<span class="bu">sum</span>(y_test[group_test <span class="op">==</span> <span class="dv">2</span>]) <span class="op">/</span> np.<span class="bu">sum</span>(y_hat))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-scrolled="true" data-execution_count="147">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"PPV for white individuals"</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.<span class="bu">sum</span>(y_test[group_test <span class="op">==</span> <span class="dv">1</span>]) <span class="op">/</span> np.<span class="bu">sum</span>(y_hat[group_test <span class="op">==</span> <span class="dv">1</span>]))</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"PPV for Black individuals"</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.<span class="bu">sum</span>(y_test[group_test <span class="op">==</span> <span class="dv">2</span>]) <span class="op">/</span> np.<span class="bu">sum</span>(y_hat[group_test <span class="op">==</span> <span class="dv">2</span>]))</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(X_test, columns <span class="op">=</span> features_to_use)</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"pred_label"</span>] <span class="op">=</span> <span class="dv">1</span><span class="op">*</span> y_hat.tolist()</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"label"</span>] <span class="op">=</span> y_test.tolist()</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"race"</span>] <span class="op">=</span> group_test.tolist()</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>df.groupby([<span class="st">"race"</span>, <span class="st">"pred_label"</span>])[<span class="st">"label"</span>].mean().reset_index(name <span class="op">=</span> <span class="st">"mean"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>PPV for white individuals
-0.806376025158784
+0.9366807535276843
 PPV for Black individuals
-0.12474563729419745</code></pre>
+0.8967198581560284</code></pre>
 </div>
-</div>
-<p>The PPV for white individuals is .8064 and for Black individuals it is .1247. This is an extreme difference and will be discussed further later in this post.</p>
-<div class="cell" data-execution_count="82">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Confusion matrix for Black individuals </span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>confusion_matrix(y_test[group_test <span class="op">==</span> <span class="dv">2</span>], y_hat[group_test <span class="op">==</span> <span class="dv">2</span>], normalize <span class="op">=</span> <span class="st">"true"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="82">
-<pre><code>array([[0.78612927, 0.21387073],
-       [0.17597627, 0.82402373]])</code></pre>
-</div>
-</div>
-<div class="cell" data-scrolled="true" data-execution_count="83">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Confusion matrix for white individuals</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>confusion_matrix(y_test[group_test <span class="op">==</span> <span class="dv">1</span>], y_hat[group_test <span class="op">==</span> <span class="dv">1</span>], normalize <span class="op">=</span> <span class="st">"true"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="83">
-<pre><code>array([[0.79700942, 0.20299058],
-       [0.15974612, 0.84025388]])</code></pre>
-</div>
-</div>
-<p>The false negative rate for Black individuals is .1759 and the false positive rate is .2138. The false negative rate for white individuals is .1597 and the false positive rate is .2138. So this is not an extreme difference but the error rates are not completely balanced.</p>
-<p>The model would be calibrated if Black and white individuals who were predicted to be unemployed had the same chance of being unemployed. To calculate this, we want to take all the individuals who were predicted to be unemployed and calculate what percentage actually are by group.</p>
-<p>Above, we calculated this positive predictive value for the model and the results are striking.</p>
-<div class="cell" data-execution_count="141">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(X_test, columns <span class="op">=</span> features_to_use)</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"pred_label"</span>] <span class="op">=</span> <span class="dv">1</span><span class="op">*</span> y_hat.tolist()</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"label"</span>] <span class="op">=</span> y_test.tolist()</span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"race"</span>] <span class="op">=</span> group_test.tolist()</span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>df.groupby([<span class="st">"race"</span>, <span class="st">"pred_label"</span>])[<span class="st">"label"</span>].mean().reset_index(name <span class="op">=</span> <span class="st">"mean"</span>)</span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a><span class="co">#p = sns.barplot(data = means, x = "pred_label", y = "mean", hue = "race")</span></span>
-<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="141">
+<div class="cell-output cell-output-display" data-execution_count="147">
 
 <div>
 
@@ -711,270 +433,70 @@ PPV for Black individuals
   <thead>
     <tr>
       <th></th>
-      <th>AGEP</th>
-      <th>SCHL</th>
-      <th>MAR</th>
-      <th>RELP</th>
-      <th>DIS</th>
-      <th>ESP</th>
-      <th>CIT</th>
-      <th>MIG</th>
-      <th>MIL</th>
-      <th>ANC</th>
-      <th>NATIVITY</th>
-      <th>DEAR</th>
-      <th>DEYE</th>
-      <th>DREM</th>
-      <th>SEX</th>
-      <th>pred_label</th>
-      <th>label</th>
       <th>race</th>
+      <th>pred_label</th>
+      <th>mean</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>84.0</td>
-      <td>15.0</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>4.0</td>
-      <td>3.0</td>
-      <td>4.0</td>
-      <td>4.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>False</td>
-      <td>False</td>
       <td>1</td>
+      <td>False</td>
+      <td>0.151795</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>95.0</td>
-      <td>16.0</td>
-      <td>2.0</td>
-      <td>6.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>4.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>False</td>
-      <td>False</td>
       <td>1</td>
+      <td>True</td>
+      <td>0.787050</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>55.0</td>
-      <td>19.0</td>
-      <td>5.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>3.0</td>
-      <td>4.0</td>
-      <td>2.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
+      <td>2</td>
       <td>False</td>
-      <td>False</td>
-      <td>1</td>
+      <td>0.141214</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>66.0</td>
-      <td>18.0</td>
-      <td>5.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>4.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>False</td>
-      <td>True</td>
       <td>2</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>59.0</td>
-      <td>16.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>4.0</td>
-      <td>2.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
       <td>True</td>
-      <td>False</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>32495</th>
-      <td>84.0</td>
-      <td>21.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>1.0</td>
-      <td>False</td>
-      <td>False</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>32496</th>
-      <td>67.0</td>
-      <td>20.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>4.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>False</td>
-      <td>True</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>32497</th>
-      <td>50.0</td>
-      <td>16.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>4.0</td>
-      <td>2.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>1.0</td>
-      <td>True</td>
-      <td>True</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>32498</th>
-      <td>37.0</td>
-      <td>13.0</td>
-      <td>5.0</td>
-      <td>17.0</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>3.0</td>
-      <td>4.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>False</td>
-      <td>True</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <th>32499</th>
-      <td>68.0</td>
-      <td>21.0</td>
-      <td>5.0</td>
-      <td>0.0</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>4.0</td>
-      <td>2.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>False</td>
-      <td>False</td>
-      <td>1</td>
+      <td>0.738918</td>
     </tr>
   </tbody>
 </table>
-<p>32500 rows × 18 columns</p>
 </div>
 </div>
 </div>
-<section id="error-rate-balance" class="level3">
-<h3 class="anchored" data-anchor-id="error-rate-balance">Error rate balance</h3>
-<p>Error rate balance is a measure of fairness that is defined as the algorithm having equal error rates across racial groups. As we calculated above, the error rates across Black and white individuals are very different. Specifically, the</p>
-
-
+<p>The PPV for white individuals if 4 percentage points higher than that for Black individuals. This means that the model is not perfectly calibrated although the disparity is not that extreme.</p>
+<div class="cell" data-execution_count="82">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Confusion matrix for Black individuals </span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>confusion_matrix(y_test[group_test <span class="op">==</span> <span class="dv">2</span>], y_hat[group_test <span class="op">==</span> <span class="dv">2</span>], normalize <span class="op">=</span> <span class="st">"true"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="82">
+<pre><code>array([[0.78612927, 0.21387073],
+       [0.17597627, 0.82402373]])</code></pre>
+</div>
+</div>
+<div class="cell" data-scrolled="true" data-execution_count="83">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Confusion matrix for white individuals</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>confusion_matrix(y_test[group_test <span class="op">==</span> <span class="dv">1</span>], y_hat[group_test <span class="op">==</span> <span class="dv">1</span>], normalize <span class="op">=</span> <span class="st">"true"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="83">
+<pre><code>array([[0.79700942, 0.20299058],
+       [0.15974612, 0.84025388]])</code></pre>
+</div>
+</div>
+<p>The false negative rate for Black individuals is .1759 and the false positive rate is .2138. The false negative rate for white individuals is .1597 and the false positive rate is .2138. So this is not an extreme difference but the error rates are not completely balanced.</p>
+<p>The model would be calibrated if Black and white individuals who were predicted to be unemployed had the same chance of being unemployed. To calculate this, we want to take all the individuals who were predicted to be unemployed and calculate what percentage actually are by group.</p>
+<p>Finally, let’s consider statistical parity. Statistical parity is achieved if a protected group is treated equally by the model as the entire population being considered. So in this context, that would mean Black individuals being predicted to be unemployed with the same accuracy as the general predictions. As calculated above, the overall accuracy is .815. The accuracy for Black individuals is .802. So again, this is a slight difference but there is a discrepency.</p>
+<p>Overall, our model seems to have slight bias against Black Individuals using all of our measures of fairness but none of these disparities is as extreme as the example we examined in class. However, that does not mean it is insignificant. Discrimination is compounding and all of these differences can lead to a combined effect of Black individuals being discriminated against by our model.</p>
 </section>
+<section id="further-discussion" class="level2">
+<h2 class="anchored" data-anchor-id="further-discussion">Further Discussion</h2>
+<p>Now, let’s consider the broader implications of the model we have created, what contexts that it could be used in, and how any unfairness by different standards could impact individuals when our model is being used. An algorithm that predicts unemployment could be useful to a variety of companies or interests. People renting homes, giving loans, or providing other social services could all be interested in predicting employment status. I could also see such a model being used for backround checks of various kinds, espeically when information on individuals could be limited or collecting employment status is not permitted in the circumstance.</p>
+<p>Based on my audit, I think that the impact of my model being deployed by a corportation or the government could perpetuate existing economic inequalities for Black individuals. A model that predicts Black unemployment at a higher rate than white individuals could lead to people already facing systemic oppression being denied opportunities or social services. The model constructwed in this post has slight disc rimination according to each measure of fairness we considered. Although these are all relatively small, they all are unfair towards Black individuals implying that implementing the model on a large scale would have a disparate impact on that population. Small, maybe even statistically insignificant, discrimination in many areas or by many standards adds up and does impact the lives of real people.</p>
+<p>Beyond the actual fairness of the model, there are some moral considerations that I would have to take into account before allowing this model to be implemented in the real world. Let’s consider the example of government agencies providing certain social services, housing, health insurance, or other benefits based on whether the model expects an individual to be able to pay for them based on employment status. For example, there have been welfare laws that require employment and I could see this being used to implement similar programs across different social sectors. I personally do not believe it is the job of the government to deny individuals social services or aid if they are unemployed. It would obviously be unfortunate if an individual was denied a service because the model predicted they were unemployed and they were not, but I think the real failure in that instance is making help conditional on employment and only valuing those who “contribute” to society based on capitalist values rather than valuing and prioritizing a social safety net for all.</p>
+
+
 </section>
 </section>
 
