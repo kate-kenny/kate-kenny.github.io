@@ -298,7 +298,7 @@ Validation score = 0.7412
 <section id="experiments" class="level3">
 <h3 class="anchored" data-anchor-id="experiments">Experiments</h3>
 <p>The first experiment we are going to perform is allowing p_features, the number of features, to increase while the number of training points, n_train, remains the same.</p>
-<div class="cell" data-execution_count="177">
+<div class="cell" data-execution_count="181">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>LR <span class="op">=</span> LinearRegression()</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>n_train <span class="op">=</span> <span class="dv">100</span></span>
@@ -315,12 +315,13 @@ Validation score = 0.7412
 <span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    score_val.append(LR.score(pad(X_val), y_val).<span class="bu">round</span>(<span class="dv">4</span>))</span>
 <span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>plt.plot(score_training)</span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>plt.plot(score_val)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>plt.plot(score_val)</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> plt.gca().<span class="bu">set</span>(xlabel <span class="op">=</span> <span class="st">"Iteration"</span>, ylabel <span class="op">=</span> <span class="st">"Score"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="Linear%20Regression_files/figure-html/cell-4-output-1.png" class="img-fluid"></p>
 </div>
 </div>
-<p>Here we see both scores increasing at first but the score val beginning to fluctuate pretty widely once we get past around 65 features.</p>
+<p>Here we see both scores increasing at first but the score val beginning to fluctuate pretty widely once we get past around 65 features while the training score continues to approach and possibly reach 1. This is because the training model is able to refit directly based on the number of features and as the features increase, as does the liklihood overfitting. It appears that we reach a certain point where increasing the number of features no longer increases the accuracy because the model becomes to overfit to accurately make predictions on the test data. That is why we see the score_val starting to drop, slowly at first and then drastically.</p>
 </section>
 </section>
 <section id="lasso-regularization" class="level2">
@@ -340,7 +341,7 @@ Validation score = 0.7412
 </div>
 </div>
 <p>Let’s repeat the experiment above that we did for Linear Regression with LASSO.</p>
-<div class="cell" data-execution_count="179">
+<div class="cell" data-execution_count="182">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>n_train <span class="op">=</span> <span class="dv">100</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>score_training <span class="op">=</span> []</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>score_val <span class="op">=</span> []</span>
@@ -355,12 +356,13 @@ Validation score = 0.7412
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    score_val.append(L.score(pad(X_val), y_val).<span class="bu">round</span>(<span class="dv">4</span>))</span>
 <span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>plt.plot(score_training)</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>plt.plot(score_val)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>plt.plot(score_val)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> plt.gca().<span class="bu">set</span>(xlabel <span class="op">=</span> <span class="st">"Iteration"</span>, ylabel <span class="op">=</span> <span class="st">"Score"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="Linear%20Regression_files/figure-html/cell-6-output-1.png" class="img-fluid"></p>
 </div>
 </div>
-<p>There are somewhat similar results in this LASSO experiment as we saw for Linear Regression however the variation of the validation score is much smaller. So overall the validation score seems to be higher with LASSO than linear regression.</p>
+<p>There are somewhat similar results in this LASSO experiment as we saw for Linear Regression however the variation of the validation score is much smaller. So overall the validation score seems to be higher with LASSO than linear regression. Also similarly to above, it appears that the reason that the validation score drops while training score continues to increase is that our model is overfitting on the training data. The result of this is an extremely high training accuracy (very close to or at 1) and a dropping testing accuracy. This LASSO experiment seems to prevent some of the extreme overfitting we saw above that led to the validation score fluctuating wildly, but the model is still overfitting as the accuracy clearly decreases past a certain number of iterations.</p>
 
 
 </section>
