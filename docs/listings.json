@@ -2,7 +2,11 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/blog6/Unsupervised Learning.html",
       "/posts/blog1/perceptron.html",
+      "/posts/blog8/Engaging with Dr. Gebru.html",
+      "/posts/blog7/Unsupervised Learning.html",
+      "/posts/Untitled.html",
       "/posts/blog2/Logistic Regression.html",
       "/posts/blog5/Auditing Allocative Bias.html",
       "/posts/blog4/Linear Regression.html",
