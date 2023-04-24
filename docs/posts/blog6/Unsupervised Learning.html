@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Kate Kenny">
 
-<title>My Awesome CSCI 0451 Blog – unsupervised-learning</title>
+<title>My Awesome CSCI 0451 Blog - Unsupervised Learning: 2 Ways</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -129,6 +130,7 @@ background-size: cover;
     }
     </style>
 
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="../../styles.css">
 </head>
@@ -169,7 +171,28 @@ background-size: cover;
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title"><p>Unsupervised Learning: 2 Ways</p></h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Kate Kenny </p>
+            </div>
+    </div>
+      
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     
@@ -178,18 +201,217 @@ background-size: cover;
 
 
 
-<section id="unsupervised-learning-with-linear-algebra" class="level1">
-<h1>Unsupervised Learning with Linear Algebra</h1>
+
+<section id="unsupervised-learning-with-linear-algebra-two-ways" class="level1">
+<h1>Unsupervised Learning with Linear Algebra: Two Ways</h1>
 <section id="kate-kenny" class="level2">
 <h2 class="anchored" data-anchor-id="kate-kenny">Kate Kenny</h2>
 <section id="cs-0451" class="level3">
 <h3 class="anchored" data-anchor-id="cs-0451">CS 0451</h3>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>In this</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-
-
+<p>In this post, we will be exploring unsupervised learning through two examples. We will be working with Singular Value Decomposition (SVD) to do image compression and with Spectral Community Detection to deal with clusters of data. As a result, this blog post is broken into those two sections to explore each topic seperately.</p>
 </section>
+</section>
+<section id="singular-value-decompostion" class="level2">
+<h2 class="anchored" data-anchor-id="singular-value-decompostion">Singular Value Decompostion</h2>
+<p>The SVD of a matrix <span class="math inline">\(\mathbf{A} \in \mathbb{R}^{mxn}\)</span> is as follows.</p>
+<p><span class="math inline">\(\mathbf{A = UDV}^T\)</span></p>
+<p>where <span class="math inline">\(\mathbf{D}\)</span> is a diagonal matrix and the matrices <span class="math inline">\(\mathbf{U}\)</span> and <span class="math inline">\(\mathbf{V}\)</span> are orthogonal matrices. The entries of <span class="math inline">\(\mathbf{D}\)</span>, <span class="math inline">\(\sigma_i\)</span>, give some measure of how large <span class="math inline">\(\textbf{A}\)</span> is. We can approximate the matrix <span class="math inline">\(\textbf{A}\)</span> using a representation that only considers the first <span class="math inline">\(k\)</span> columns of <span class="math inline">\(\textbf{U}\)</span>, <span class="math inline">\(k\)</span> values in <span class="math inline">\(\textbf{D}\)</span> and the first <span class="math inline">\(k\)</span> rows of <span class="math inline">\(\textbf{V}\)</span>.</p>
+<p>In this post, we are going to use SVD to construct approximations of a greyscale image using different values of <span class="math inline">\(k\)</span>.</p>
+<section id="choosing-an-image" class="level3">
+<h3 class="anchored" data-anchor-id="choosing-an-image">Choosing an image</h3>
+<p>First, let’s choose an RGB image and convert it to greyscale. I am selecting a picture of a Nova Scotia Duck Tolling Retriever.</p>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> PIL</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> urllib</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> read_image(url):</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.array(PIL.Image.<span class="bu">open</span>(urllib.request.urlopen(url)))</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://images.fineartamerica.com/images/artworkimages/mediumlarge/3/nova-scotia-duck-tolling-retriever-dog-warren-photographic.jpg"</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>img <span class="op">=</span> read_image(url)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>fig, axarr <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize <span class="op">=</span> (<span class="dv">7</span>, <span class="dv">3</span>))</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> to_greyscale(im):</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">1</span> <span class="op">-</span> np.dot(im[...,:<span class="dv">3</span>], [<span class="fl">0.2989</span>, <span class="fl">0.5870</span>, <span class="fl">0.1140</span>])</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>grey_img <span class="op">=</span> to_greyscale(img)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>axarr[<span class="dv">0</span>].imshow(img)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>axarr[<span class="dv">0</span>].axis(<span class="st">"off"</span>)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>axarr[<span class="dv">0</span>].<span class="bu">set</span>(title <span class="op">=</span> <span class="st">"original"</span>)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>axarr[<span class="dv">1</span>].imshow(grey_img, cmap <span class="op">=</span> <span class="st">"Greys"</span>)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>axarr[<span class="dv">1</span>].axis(<span class="st">"off"</span>)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>axarr[<span class="dv">1</span>].<span class="bu">set</span>(title <span class="op">=</span> <span class="st">"greyscale"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>[Text(0.5, 1.0, 'greyscale')]</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Unsupervised%20Learning_files/figure-html/cell-2-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="implementation" class="level2">
+<h2 class="anchored" data-anchor-id="implementation">Implementation</h2>
+<p>Now, our image is a very large matrix. So we can implement SVD to approximate the picture!</p>
+<p>We are going to write a few methods in this post included svd_reconstruct() which will reconstruct an image using a given value <span class="math inline">\(k\)</span> and svd_experiment() which will reconstruct an image for a variety of <span class="math inline">\(k\)</span> values and determine the percentage of the original image’s storage needed for each reconstruction. Additionally, we will need to write some methods to view and compare our images and reconstructions.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> compare_images(<span class="va">self</span>, A, A_):</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">#plots and labels original/reconstructed images</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        fig, axarr <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize <span class="op">=</span> (<span class="dv">7</span>, <span class="dv">3</span>))</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        axarr[<span class="dv">0</span>].imshow(A, cmap <span class="op">=</span> <span class="st">"Greys"</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        axarr[<span class="dv">0</span>].axis(<span class="st">"off"</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        axarr[<span class="dv">0</span>].<span class="bu">set</span>(title <span class="op">=</span> <span class="st">"original image"</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        axarr[<span class="dv">1</span>].imshow(A_, cmap <span class="op">=</span> <span class="st">"Greys"</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        axarr[<span class="dv">1</span>].axis(<span class="st">"off"</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        axarr[<span class="dv">1</span>].<span class="bu">set</span>(title <span class="op">=</span> <span class="st">"reconstructed image"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="reconstructing-our-original-image" class="level3">
+<h3 class="anchored" data-anchor-id="reconstructing-our-original-image">Reconstructing our original image</h3>
+<p>Let’s implement the svd_reconstruct() function that allows us to specify <span class="math inline">\(k\)</span> and perform SVD reconstruction on an image using that value.</p>
+<div class="cell" data-execution_count="91">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> svd_reconstruct(img, k): </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        <span class="co">#reconstructs img from SVD using k values</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        A <span class="op">=</span> img</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>       </span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        U, sigma, V <span class="op">=</span> np.linalg.svd(A)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        <span class="co">#construct diagonal matrix D whose entries are entires of sigma</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        D <span class="op">=</span> np.zeros_like(A,dtype<span class="op">=</span><span class="bu">float</span>) <span class="co"># matrix of zeros of same shape as A</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        D[:<span class="bu">min</span>(A.shape),:<span class="bu">min</span>(A.shape)] <span class="op">=</span> np.diag(sigma)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        <span class="co">#index first k rows/entries/columns of U, D, and V respectively</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>        U_ <span class="op">=</span> U[:,:k]</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        D_ <span class="op">=</span> D[:k, :k]</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        V_ <span class="op">=</span> V[:k, :]</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>        A_ <span class="op">=</span> U_ <span class="op">@</span> D_ <span class="op">@</span> V_</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> A_</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now that we have our reconstruct function, let’s try it for <span class="math inline">\(k=5\)</span> on the image selected above.</p>
+<div class="cell" data-execution_count="92">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>compare_images(grey_img, svd_reconstruct(grey_img, <span class="dv">5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Unsupervised%20Learning_files/figure-html/cell-5-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>This is not a great approximation, but we can start to see our image taking shape even with a <span class="math inline">\(k\)</span> value as low as 5. So now let’s implement our experimentation function and see how different <span class="math inline">\(k\)</span> values perform when reconstructing our image.</p>
+</section>
+<section id="experimentation" class="level3">
+<h3 class="anchored" data-anchor-id="experimentation">Experimentation</h3>
+<div class="cell" data-scrolled="true" data-execution_count="93">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> svd_experiment(img): </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    fig, axarr <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">5</span>, figsize <span class="op">=</span> (<span class="dv">10</span>, <span class="dv">3</span>))</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    k_arr <span class="op">=</span> np.array([<span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>, <span class="dv">100</span>])</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    count <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> k <span class="kw">in</span> k_arr: </span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>        storage <span class="op">=</span> <span class="bu">round</span>((k<span class="op">*</span>k) <span class="op">/</span> (img.shape[<span class="dv">0</span>]<span class="op">*</span>img.shape[<span class="dv">1</span>]) <span class="op">*</span> <span class="dv">100</span>, <span class="dv">3</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        axarr[count].imshow(svd_reconstruct(img, k), cmap <span class="op">=</span> <span class="st">"Greys"</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>        axarr[count].axis(<span class="st">"off"</span>)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>        axarr[count].<span class="bu">set</span>(title <span class="op">=</span> <span class="bu">str</span>(k) <span class="op">+</span> <span class="st">" components, </span><span class="ch">\n</span><span class="sc">%s</span><span class="st">torage = "</span> <span class="op">+</span> <span class="bu">str</span>(storage))</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>        count<span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>svd_experiment(grey_img)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Unsupervised%20Learning_files/figure-html/cell-6-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>It is striking how low the percentage of storage needed to store these images is. Part of the reason for this could be the image we are using in our experiment, which has a shape of (900, 744) and consequently requires a large number of pixels for storage itself. This really shows the utility of our reconstructed images as there is no difference to the naked high with 100 components yet the storage demands are vastly different.</p>
+</section>
+</section>
+<section id="spectral-community-detection" class="level2">
+<h2 class="anchored" data-anchor-id="spectral-community-detection">Spectral Community Detection</h2>
+<p>Next, we are going to explore unsupervised learning in the context of Laplacian spectral clustering. Specifically, we will be looking at a graph that represents a social network, specifically a karate club. Below is the network.</p>
+<div class="cell" data-execution_count="112">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> networkx <span class="im">as</span> nx</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> nx.karate_club_graph()</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>layout <span class="op">=</span> nx.fruchterman_reingold_layout(G)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>nx.draw(G, layout, with_labels<span class="op">=</span><span class="va">True</span>, node_color <span class="op">=</span> <span class="st">"steelblue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Unsupervised%20Learning_files/figure-html/cell-7-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="113">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>clubs <span class="op">=</span> nx.get_node_attributes(G, <span class="st">"club"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>nx.draw(G, layout,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>        with_labels<span class="op">=</span><span class="va">True</span>, </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>        node_color <span class="op">=</span> [<span class="st">"orange"</span> <span class="cf">if</span> clubs[i] <span class="op">==</span> <span class="st">"Officer"</span> <span class="cf">else</span> <span class="st">"steelblue"</span> <span class="cf">for</span> i <span class="kw">in</span> G.nodes()],</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        edgecolors <span class="op">=</span> <span class="st">"black"</span> <span class="co"># confusingly, this is the color of node borders, not of edges</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>        ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Unsupervised%20Learning_files/figure-html/cell-8-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Spectral clustering is a method to define clustering as good when we don’t “cut” too many edges. “Cutting” edges in this instance is labelling two conencted nodes with different labels.</p>
+<p>To implement this, we want to find a vector <span class="math inline">\(z\)</span> that minimizes the normalized cut objective function <span class="math inline">\(f(\textbf{z}, \textbf{A})\)</span> which is defined below. Let <span class="math inline">\(\textbf{A}\)</span> be the adjacency matrix of a graph <span class="math inline">\(G\)</span>.</p>
+<p><span class="math display">\[
+f(z, A) = \text{cut}({A}, {z})\left(\frac{1}{\text{vol}_{0}(A, z)} + \frac{1}{\text{vol}_{1}(A, z)}\right)\]</span></p>
+<p>where <span class="math display">\[
+\text{vol}_{j}({A}{z}) = \sum_{i = 1}^n \sum_{i' = 1}^n 1*[{z_i = j}] a_{ii'}
+\]</span> In other words, <span class="math inline">\(\text{vol}_{j}({A}{z})\)</span> is the number of edges that have one node in cluster <span class="math inline">\(j\)</span>.</p>
+<p>Although we cannot solve for <span class="math inline">\(z\)</span> directly, we can approximate <span class="math inline">\(z\)</span> using an eigenvector of the Laplacian matrix, <span class="math inline">\(L = (D)^{-1}(D - A)\)</span> where <span class="math display">\[
+\textbf{D} = \left[\begin{matrix} \sum_{i = 1}^n a_{i1} &amp; &amp; &amp; \\
+    &amp; \sum_{i = 1}^n a_{i2} &amp; &amp; \\
+    &amp;  &amp; \ddots &amp; \\
+    &amp; &amp; &amp; \sum_{i = 1}^n a_{in}
+\end{matrix}\right]\;.
+\]</span> <span class="math inline">\(z\)</span> can be approximated by the eigenvector associated with the second smallest eigenvalue of <span class="math inline">\(L\)</span>. In the implementation below, we will find <span class="math inline">\(L\)</span> and the associated eigenvector which can approximate <span class="math inline">\(z\)</span> and predict the clustering of the Karate club.</p>
+<div class="cell" data-execution_count="243">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> spectral_clustering(G): </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">#define adjacency matrix A</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    A <span class="op">=</span> nx.adjacency_matrix(G).toarray()</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">#construct diagonal matrix D whose entries are sum of respective row in A</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    diag <span class="op">=</span> np.<span class="bu">sum</span>(A, axis <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    D <span class="op">=</span> np.diag(diag)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">#calculate L </span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    L <span class="op">=</span> (np.linalg.inv(D))<span class="op">@</span>(D <span class="op">-</span> A)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">#compute eigenvalues and corresponding eigenvectors</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    eigs, eig_vecs <span class="op">=</span> np.linalg.eig(L)</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">#delete min eigenvalue and corresponding eigenvector</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    eigs2 <span class="op">=</span> np.delete(eigs, np.argmin(eigs, axis<span class="op">=</span> <span class="va">None</span>), <span class="dv">0</span>)</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    eig_vecs2 <span class="op">=</span> np.delete(eig_vecs, np.argmin(eigs), <span class="dv">1</span>)</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>    z <span class="op">=</span> eig_vecs2[:, np.argmin(eigs2)]</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> z</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a><span class="co">#create labels based on z and plot graph</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now that we can calculate <span class="math inline">\(z\)</span>, let’s predict the group seperation in the Karate club and illustrate the preiction.</p>
+<div class="cell" data-execution_count="244">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>z_ <span class="op">=</span> spectral_clustering(G) <span class="op">&gt;</span> <span class="dv">0</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>plot_graph(G, z<span class="op">=</span>z_)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>nx.draw(G, layout,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>        with_labels<span class="op">=</span><span class="va">True</span>, </span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>        node_color <span class="op">=</span> [<span class="st">"steelblue"</span> <span class="cf">if</span> z_[i] <span class="op">==</span> <span class="dv">1</span> <span class="cf">else</span> <span class="st">"orange"</span> <span class="cf">for</span> i <span class="kw">in</span> G.nodes()],</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>        edgecolors <span class="op">=</span> <span class="st">"black"</span> </span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>        ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Unsupervised%20Learning_files/figure-html/cell-10-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>The predicted labels from our unsupervised learning process are fairly accurate to the actual divisions in the Karate club. Only node 8 is mislabelled so the unsupervised learning implemented seems to be quite a successful example of using spectral clustering.</p>
+
+
 </section>
 </section>
 
