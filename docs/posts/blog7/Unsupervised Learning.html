@@ -344,7 +344,7 @@ background-size: cover;
 <p><img src="Unsupervised%20Learning_files/figure-html/cell-7-output-1.png" class="img-fluid"></p>
 </div>
 </div>
-<div class="cell" data-scrolled="true" data-execution_count="113">
+<div class="cell" data-execution_count="113">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>clubs <span class="op">=</span> nx.get_node_attributes(G, <span class="st">"club"</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>nx.draw(G, layout,</span>
@@ -356,7 +356,21 @@ background-size: cover;
 <p><img src="Unsupervised%20Learning_files/figure-html/cell-8-output-1.png" class="img-fluid"></p>
 </div>
 </div>
-<div class="cell" data-execution_count="191">
+<p>Spectral clustering is a method to define clustering as good when we don’t “cut” too many edges. “Cutting” edges in this instance is labelling two conencted nodes with different labels.</p>
+<p>To implement this, we want to find a vector <span class="math inline">\(z\)</span> that minimizes the normalized cut objective function <span class="math inline">\(f(\textbf{z}, \textbf{A})\)</span> which is defined below. Let <span class="math inline">\(\textbf{A}\)</span> be the adjacency matrix of a graph <span class="math inline">\(G\)</span>.</p>
+<p><span class="math display">\[
+f(z, A) = \text{cut}({A}, {z})\left(\frac{1}{\text{vol}_{0}(A, z)} + \frac{1}{\text{vol}_{1}(A, z)}\right)\]</span></p>
+<p>where <span class="math display">\[
+\text{vol}_{j}({A}{z}) = \sum_{i = 1}^n \sum_{i' = 1}^n 1*[{z_i = j}] a_{ii'}
+\]</span> In other words, <span class="math inline">\(\text{vol}_{j}({A}{z})\)</span> is the number of edges that have one node in cluster <span class="math inline">\(j\)</span>.</p>
+<p>Although we cannot solve for <span class="math inline">\(z\)</span> directly, we can approximate <span class="math inline">\(z\)</span> using an eigenvector of the Laplacian matrix, <span class="math inline">\(L = (D)^{-1}(D - A)\)</span> where <span class="math display">\[
+\textbf{D} = \left[\begin{matrix} \sum_{i = 1}^n a_{i1} &amp; &amp; &amp; \\
+    &amp; \sum_{i = 1}^n a_{i2} &amp; &amp; \\
+    &amp;  &amp; \ddots &amp; \\
+    &amp; &amp; &amp; \sum_{i = 1}^n a_{in}
+\end{matrix}\right]\;.
+\]</span> <span class="math inline">\(z\)</span> can be approximated by the eigenvector associated with the second smallest eigenvalue of <span class="math inline">\(L\)</span>. In the implementation below, we will find <span class="math inline">\(L\)</span> and the associated eigenvector which can approximate <span class="math inline">\(z\)</span> and predict the clustering of the Karate club.</p>
+<div class="cell" data-execution_count="243">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> spectral_clustering(G): </span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">#define adjacency matrix A</span></span>
@@ -367,68 +381,35 @@ background-size: cover;
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    D <span class="op">=</span> np.diag(diag)</span>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">#calculate L </span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    L <span class="op">=</span> (np.linalg.inv(D))<span class="op">@</span>(A <span class="op">-</span> D)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    L <span class="op">=</span> (np.linalg.inv(D))<span class="op">@</span>(D <span class="op">-</span> A)</span>
 <span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">#compute eigenvalues and corresponding eigenvectors</span></span>
 <span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    eigs, eig_vecs <span class="op">=</span> np.linalg.eig(L)</span>
 <span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">#delete min eigenvalue and corresponding eigenvector</span></span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    eigs2 <span class="op">=</span> np.delete(eigs, np.argmin(eigs))</span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    eig_vecs2 <span class="op">=</span> np.delete(eig_vecs, np.argmin(eigs), <span class="dv">0</span>)</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    eigs2 <span class="op">=</span> np.delete(eigs, np.argmin(eigs, axis<span class="op">=</span> <span class="va">None</span>), <span class="dv">0</span>)</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    eig_vecs2 <span class="op">=</span> np.delete(eig_vecs, np.argmin(eigs), <span class="dv">1</span>)</span>
 <span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>    z <span class="op">=</span> eig_vecs[np.argmin(eigs2)]</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>    z <span class="op">=</span> eig_vecs2[:, np.argmin(eigs2)]</span>
 <span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> z</span>
 <span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a><span class="co">#create labels based on z and plot graph</span></span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>clubs <span class="op">=</span> nx.get_node_attributes(G, <span class="st">"club"</span>)</span>
-<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> make_attributes(G, z): </span>
-<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>    labels <span class="op">=</span> {}</span>
-<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> G.nodes(): </span>
-<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>        labels[i] <span class="op">=</span> <span class="st">"group2"</span> <span class="cf">if</span> z[i] <span class="op">!=</span> z[<span class="dv">0</span>] <span class="cf">else</span> <span class="st">"group1"</span></span>
-<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> nx.set_node_attributes(G, labels)</span>
-<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(make_attributes(G, spectral_clustering(G)))</span>
-<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> [<span class="st">"red"</span> <span class="cf">if</span> z[i] <span class="op">!=</span> z[j] <span class="cf">else</span> <span class="st">"grey"</span> <span class="cf">for</span> i, j <span class="kw">in</span> G.edges()]</span>
-<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>nx.draw(G, layout,</span>
-<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>        with_labels<span class="op">=</span><span class="va">True</span>, </span>
-<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>        node_color <span class="op">=</span> [<span class="st">"orange"</span> <span class="cf">if</span> clubs[i] <span class="op">==</span> <span class="st">"Officer"</span> <span class="cf">else</span> <span class="st">"steelblue"</span> <span class="cf">for</span> i <span class="kw">in</span> G.nodes()],</span>
-<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>        edgecolors <span class="op">=</span> <span class="st">"black"</span> <span class="co"># confusingly, this is the color of node borders, not of edges</span></span>
-<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>        ) </span>
-<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>nx.draw(G, layout,</span>
-<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>        with_labels<span class="op">=</span><span class="va">True</span>, </span>
-<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>        node_color <span class="op">=</span> spectral_clustering(G),</span>
-<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>        edgecolors <span class="op">=</span> <span class="st">"black"</span> <span class="co"># confusingly, this is the color of node borders, not of edges</span></span>
-<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>        ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>ValueError: dictionary update sequence element #0 has length 1; 2 is required</code></pre>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a><span class="co">#create labels based on z and plot graph</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div>
-<div class="cell" data-execution_count="186">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_graph(G, z <span class="op">=</span> <span class="va">None</span>, ax <span class="op">=</span> <span class="va">None</span>, show_edge_cuts <span class="op">=</span> <span class="va">True</span>):</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> z <span class="kw">is</span> <span class="va">None</span>:</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>        nx.draw(G, layout, alpha <span class="op">=</span> <span class="fl">.4</span>, node_color <span class="op">=</span> <span class="st">"grey"</span>, node_size <span class="op">=</span> <span class="dv">20</span>, ax <span class="op">=</span> ax)</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>: </span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> show_edge_cuts:</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>            colors <span class="op">=</span> [<span class="st">"red"</span> <span class="cf">if</span> z[i] <span class="op">!=</span> z[j] <span class="cf">else</span> <span class="st">"grey"</span> <span class="cf">for</span> i, j <span class="kw">in</span> G.edges()]</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>            widths <span class="op">=</span> [<span class="dv">2</span> <span class="cf">if</span> z[i] <span class="op">!=</span> z[j] <span class="cf">else</span> <span class="dv">1</span> <span class="cf">for</span> i, j <span class="kw">in</span> G.edges()]</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>            colors <span class="op">=</span> <span class="st">"black"</span></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>            widths <span class="op">=</span> <span class="dv">1</span></span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>        nx.draw(G, layout, with_labels<span class="op">=</span><span class="va">True</span>, node_color <span class="op">=</span> z, edge_color <span class="op">=</span> colors)</span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize <span class="op">=</span> (<span class="dv">4</span>, <span class="dv">4</span>))</span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>plot_graph(G, z<span class="op">=</span>spectral_clustering(G))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Now that we can calculate <span class="math inline">\(z\)</span>, let’s predict the group seperation in the Karate club and illustrate the preiction.</p>
+<div class="cell" data-execution_count="244">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>z_ <span class="op">=</span> spectral_clustering(G) <span class="op">&gt;</span> <span class="dv">0</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>plot_graph(G, z<span class="op">=</span>z_)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>nx.draw(G, layout,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>        with_labels<span class="op">=</span><span class="va">True</span>, </span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>        node_color <span class="op">=</span> [<span class="st">"steelblue"</span> <span class="cf">if</span> z_[i] <span class="op">==</span> <span class="dv">1</span> <span class="cf">else</span> <span class="st">"orange"</span> <span class="cf">for</span> i <span class="kw">in</span> G.nodes()],</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>        edgecolors <span class="op">=</span> <span class="st">"black"</span> </span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>        ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="Unsupervised%20Learning_files/figure-html/cell-10-output-1.png" class="img-fluid"></p>
 </div>
 </div>
+<p>These predicted labels are fairly accurate to the actual divisions in the Karate club. Only node 8 is mislabelled so the unsupervised learning implemented seems to be quite a successful example of using spectral clustering.</p>
 
 
 </section>
